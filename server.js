@@ -3,7 +3,11 @@ const app = express()
 const port = process.env.PORT || 3000
 const bodyParser = require('body-parser')
 const db = {
-    orders: {}
+    orders: {
+        1 : "Pizza",
+        2 : "Salad",
+        3 : "Donuts"
+    }
 }
 
 
@@ -21,16 +25,6 @@ app.get('/new', function (req, res) {
 
         ]
     })
-})
-
-app.get('/allOrders', function (req, res) {
-    res.send(db.creditCards)
-    doSomething1()
-    doSomething2()
-})
-
-app.put('/save', bodyParser.json(), function (req, res) {
-    res.send('got it.')
 })
 
 
