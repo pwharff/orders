@@ -26,15 +26,10 @@ app.get('/', function (req, res) {
 })
 
 
-app.get('/new', function (req, res) {
-    res.send({
-        something: 'else',
-        someArray: [
-            {"one": 1 },
-            {"two": 2 }
-
-        ]
-    })
+app.get('/orders', function (req, res) {
+    res.send(
+        db.orders
+    )
 })
 
 
