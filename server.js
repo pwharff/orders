@@ -31,7 +31,10 @@ app.post('/orders', async (req, res) => {
     //hit the other API to place the shipment!!!
     // const shipment = await fetch('https://api.github.com/users/defunkt')
     try {
-        const shipmentResponse = await fetch('https://er-shipping.herokuapp.com/shipments')
+        const shipmentResponse =
+          await fetch('https://er-shipping.herokuapp.com/shipments', {
+              method: 'GET' //should be post
+          })
         if (!shipmentResponse.ok)
             return res.status(200).send({ok: true, message:'Order placed but not shipped.'})
         const shipment = await shipmentResponse.json()
@@ -41,8 +44,9 @@ app.post('/orders', async (req, res) => {
             value: newOrder
         })
     } catch (excp) {
-        console.error (excp)
-        res.status(200).send({ok:false})
+        //An exception means that the shipment request failed completely - as in network down
+        //or connection lost, not just a 500 error
+        return res.status(200).send({ok: true, message:'Order placed but not shipped.'})
     }
 
 })
