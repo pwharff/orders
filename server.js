@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000
 const bodyParser = require('body-parser')
+const fetch = require('node-fetch')
 const _ = require('lodash')
 
 const db = {
@@ -30,15 +31,20 @@ app.post('/orders', async (req, res) => {
     //hit the other API to place the shipment!!!
     // const shipment = await fetch('https://api.github.com/users/defunkt')
     try {
-        const shipment = await fetch('https://er-shipping.herokuapp.com/shipments', {method: 'get'})
+        const shipmentResponse = await fetch('https://er-shipping.herokuapp.com/shipments')
+        if (!shipmentResponse.ok)
+            return res.status(200).send({ok: true, message:'Order placed but not shipped.'})
+        const shipment = await shipmentResponse.json()
+        res.send({
+            ok: true,
+            shipment,
+            value: newOrder
+        })
     } catch (excp) {
-        console.log (excp)
+        console.error (excp)
+        res.status(200).send({ok:false})
     }
-    res.send({
-        ok: true,
-        shipment,
-        value: newOrder
-    })
+
 })
 
 app.get('/', function (req, res) {
