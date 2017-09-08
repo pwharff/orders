@@ -10,6 +10,16 @@ const db = {
     }
 }
 
+app.use(bodyParser.json())
+
+app.use((req,res,next)=>{
+    req.mike = true
+    next()
+})
+
+app.post('/orders', (req, res)=> {
+    res.send(db.orders)
+})
 
 app.get('/', function (req, res) {
     res.send('Welcome to Paul and Alfredo\'s Orders')
